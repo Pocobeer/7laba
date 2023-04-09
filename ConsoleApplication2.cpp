@@ -4,7 +4,7 @@
 #include <sstream>
 #include <fstream>
 #include <map>
-
+int hui4;
 using namespace std;
 struct NumberInfo // структура для хранения информации о найденных числах
 {
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
     }
     if (out == "") {
         cout << "in: " << in << endl;
-        cout << "out пуст, введите его: ";
+        cout << "out пуст, введите его: 228 ";
         cin >> out;
     }
     ifstream in_;
@@ -96,13 +96,11 @@ int main(int argc, char* argv[])
     bool numFound = false;  // флаг, что число найдено
     string inp = "TITLE in: " + in + " out: " + out;
     system(inp.c_str());
-    char a = '[';
     char b = '\'';
     char c = '"';
-    bool kav = false;
-    bool kav1 = false;
-    bool kva = false;
     int m = 1;
+
+    bool kav = false;
     while (getline(in_, line)) // читаем файл построчно
     {
         ++lineNumber;
@@ -110,20 +108,26 @@ int main(int argc, char* argv[])
         cout << line;
         cout << "   ";
         m = m + 1;
-        for (int i = 0; i < line.length(); i++) {  // проходим по символам строки
-            
-            if (isdigit(line[i])) {  // если символ является цифрой
+        for (int i = 0; i < line.size(); i++) {
+            if (line[i] == '"' && !kav) {
+                kav = true;
+                continue;
+            }
+            if (line[i] == '"' && kav) {
+                kav = false;
+            }
+            if (isdigit(line[i]) && !kav) {  // если символ является цифрой
                 if (!numFound) {  // если это начало нового числа
                     numFound = true;  // устанавливаем флаг
-                    found = line[i] - '0';  // первую цифру записываем в переменную
+                    found = line[i] - 48;  // первую цифру записываем в переменную
                 }
                 else {  // если это следующая цифра числа
-                    found = found * 10 + (line[i] - '0');  // увеличиваем число
+                    found = found * 10 + (line[i] - 48);  // увеличиваем число
                 }
             }
             else {  // если это не цифра
                 if (numFound) {  // если перед этим было найдено число
-                    cout << found << " ";  // выводим число
+                    cout << found << "\t";  // выводим число
                     table[found].push_back(lineNumber);
                     numFound = false;  // сбрасываем флаг
                 }
@@ -142,7 +146,7 @@ int main(int argc, char* argv[])
         cout << k << " " << row.first << "\t";
         out_ << k << " " << row.first << "\t";
         k++;
-        
+
         for (auto& lineNumber : row.second) {
             cout << lineNumber << " ";
             out_ << lineNumber << " ";
@@ -150,7 +154,7 @@ int main(int argc, char* argv[])
         cout << endl;
         out_ << endl;
     }
-    
+
     out_.close();
     return 0;
 }
