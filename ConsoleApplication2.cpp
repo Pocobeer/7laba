@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <string>
 #include <vector>
 #include <sstream>
@@ -96,8 +96,12 @@ int main(int argc, char* argv[])
     bool numFound = false;  // флаг, что число найдено
     string inp = "TITLE in: " + in + " out: " + out;
     system(inp.c_str());
-    const char* b = "'";
-    const char c = '"';
+    char a = '[';
+    char b = '\'';
+    char c = '"';
+    bool kav = false;
+    bool kav1 = false;
+    bool kva = false;
     int m = 1;
     while (getline(in_, line)) // читаем файл построчно
     {
@@ -107,11 +111,11 @@ int main(int argc, char* argv[])
         cout << "   ";
         m = m + 1;
         for (int i = 0; i < line.length(); i++) {  // проходим по символам строки
+            
             if (isdigit(line[i])) {  // если символ является цифрой
                 if (!numFound) {  // если это начало нового числа
                     numFound = true;  // устанавливаем флаг
                     found = line[i] - '0';  // первую цифру записываем в переменную
-                    if (line[i-1] == '[' && line[i] == found) continue;
                 }
                 else {  // если это следующая цифра числа
                     found = found * 10 + (line[i] - '0');  // увеличиваем число
